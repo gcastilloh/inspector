@@ -1,0 +1,45 @@
+object DataModule2: TDataModule2
+  OldCreateOrder = False
+  Height = 313
+  Width = 414
+  object EditFlotante2dec: TAEInspectorEditLink
+    Tag = 0
+    EditStyle = esInplace
+    PopupWidth = 0
+    PopupHeight = 0
+    WantKeyLeftRight = False
+    WantKeyUpDown = False
+    WantKeyHomeEnd = False
+    WantKeyPriorNext = False
+    WantKeyReturn = False
+    WantKeyEscape = False
+    EditAlign = eaLeft
+    EditColor = clWhite
+    ModifiedColor = clRed
+    EditType = etFloat
+    ShowModified = False
+    Precision = 2
+    Left = 80
+    Top = 32
+  end
+  object EditEntero: TAEInspectorEditLink
+    Tag = 0
+    EditStyle = esInplace
+    PopupWidth = 0
+    PopupHeight = 0
+    WantKeyLeftRight = False
+    WantKeyUpDown = False
+    WantKeyHomeEnd = False
+    WantKeyPriorNext = False
+    WantKeyReturn = False
+    WantKeyEscape = False
+    EditAlign = eaLeft
+    EditColor = clWhite
+    ModifiedColor = clRed
+    EditType = etNumeric
+    ShowModified = False
+    Precision = 0
+    Left = 184
+    Top = 32
+  end
+end
