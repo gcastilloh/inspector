@@ -21,6 +21,8 @@ type
       fVisible : boolean;
       fPropertyType : TPropertyType;
       fValueisEmpty : boolean;
+    fhint: string;
+
 
       function GetValidaisNull() : boolean;
 
@@ -35,6 +37,7 @@ type
 
       property ValueisEmpty : boolean read fValueisEmpty write fValueisEmpty;
       property PropertyName : string read fPropertyName write fPropertyName;
+      property hint : string read fhint write fhint;
       property ID_PANEL : Integer read fID_PANEL write fID_PANEL;
       property Caption : string read fCaption write fCaption;
       property Posicion : Integer read fPosicion write fPosicion;
@@ -43,7 +46,7 @@ type
       property PropertyType : TPropertyType read fPropertyType write fPropertyType;
       property FuncionValidaconisNull : boolean read GetValidaisNull;
 
-      constructor CreateP(PropertyNameV : string; ID_PANELV : Integer; CaptionV : string; PosicionV : Integer; V : boolean; EL : TAEInspectorEditLink;fv : TValidaFuncion);
+      constructor CreateP(PropertyName : string; ID_PANEL : Integer; Caption : string; Posicion : Integer; Visible : boolean; EditLink : TAEInspectorEditLink;FuncionValidacion : TValidaFuncion);
       procedure Assign(Source : TPersistent); override;
    end;
 
@@ -51,19 +54,20 @@ implementation
 
 { TPropiedad }
 // @@ Constructores @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-constructor TPropiedad.CreateP(PropertyNameV : string; ID_PANELV : Integer; CaptionV : string; PosicionV : Integer; V : boolean; EL : TAEInspectorEditLink;fv : TValidaFuncion);
+constructor TPropiedad.CreateP(PropertyName : string; ID_PANEL : Integer; Caption : string; Posicion : Integer; Visible : boolean; EditLink : TAEInspectorEditLink;FuncionValidacion : TValidaFuncion);
 begin
-PropertyName := PropertyNameV;
-Visible := V;
-ID_PANEL := ID_PANELV;
-Caption := CaptionV;
-Posicion := PosicionV;
-EditLink := EL;
-FuncionValidacion := fv;
+self.PropertyName := PropertyName;
+self.hint := '';
+self.Visible := Visible;
+self.ID_PANEL := ID_PANEL;
+self.Caption := Caption;
+self.Posicion := Posicion;
+self.EditLink := EditLink;
+self.FuncionValidacion := FuncionValidacion;
+
 // Asignaciones Default
-fValueisEmpty := False;
-// gch 2019 aaa fModified := False;
-CanModify := True;
+self.ValueisEmpty := False;
+self.CanModify := True;
 end;
 
 procedure TPropiedad.Assign(Source : TPersistent);

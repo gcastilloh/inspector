@@ -7,9 +7,10 @@ uses
   UPatronObservador in 'UPatronObservador.pas',
   UAnimales in 'UAnimales.pas',
   UPropiedad in 'UPropiedad.pas',
-  UListaPropiedades in 'UListaPropiedades.pas',
+  UDiccionarioPropiedades in 'UDiccionarioPropiedades.pas',
   UFuncionesCallBack in 'UFuncionesCallBack.pas',
-  UDataModuleInspector in 'UDataModuleInspector.pas' {DataModule2: TDataModule};
+  UDataModuleInspector in 'UDataModuleInspector.pas' {DataModule2: TDataModule},
+  UListaPropiedades in 'UListaPropiedades.pas';
 
 {$R *.res}
 

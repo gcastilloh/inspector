@@ -11,6 +11,7 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object BtPerro: TButton
@@ -30,15 +31,6 @@ object Form1: TForm1
     Caption = 'Gato'
     TabOrder = 1
     OnClick = btnGatoClick
-  end
-  inline FrInspector1: TFrInspector
-    Left = 315
-    Top = 59
-    Width = 320
-    Height = 240
-    TabOrder = 2
-    ExplicitLeft = 315
-    ExplicitTop = 59
   end
   object RTTIInspectorBar1: TRTTIInspectorBar
     Left = 0
@@ -121,7 +113,7 @@ object Form1: TForm1
         ModifiedFont.Height = -11
         ModifiedFont.Name = 'Tahoma'
         ModifiedFont.Style = [fsBold]
-        MultiPanelState = mpsClose
+        MultiPanelState = mpsOpen
         ShortCut = 0
         VariableItemHeight = False
         ItemHeight = 26
@@ -143,6 +135,7 @@ object Form1: TForm1
             PropertyType = ptInteger
             ReadOnly = False
             ShortCut = 0
+            TextValue = '0'
           end
           item
             BoolValue = False
@@ -161,6 +154,7 @@ object Form1: TForm1
             PropertyType = ptInteger
             ReadOnly = False
             ShortCut = 0
+            TextValue = '0'
           end
           item
             BoolValue = False
@@ -180,6 +174,7 @@ object Form1: TForm1
             PropertyType = ptInteger
             ReadOnly = False
             ShortCut = 0
+            TextValue = '0'
           end>
         ShowModified = False
         Style = psProperties
@@ -244,12 +239,18 @@ object Form1: TForm1
     ShowEditorAlways = False
     ShowHint = True
     TabStop = True
-    TabOrder = 3
+    TabOrder = 2
     TopPanel = 0
     Version = '1.8.8.0'
     DefaultGradientDirection = gdVertical
-    ExplicitLeft = 24
-    ExplicitTop = 56
-    ExplicitHeight = 41
+  end
+  inline FrInspector1: TFrInspector
+    Left = 315
+    Top = 59
+    Width = 320
+    Height = 240
+    TabOrder = 3
+    ExplicitLeft = 315
+    ExplicitTop = 59
   end
 end

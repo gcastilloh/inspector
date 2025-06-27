@@ -3,7 +3,7 @@
 interface
 
 uses Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, InspectorBar, RTTIInspectorBar, Vcl.ExtCtrls, Generics.Collections, UPatronObservador,
-   UListaPropiedades, UPropiedad, UFuncionesCallBack;
+   UDiccionarioPropiedades, UPropiedad, UListaPropiedades, UFuncionesCallBack;
 
 type
 
@@ -20,7 +20,7 @@ type
       { Private declarations }
       FObserverList : TList<IObservadorModificacionPropuesta>;
 
-      IPanelGenerales : TRTTIInspectorPanel;
+      /// IPanelGenerales : TRTTIInspectorPanel;
       // IPanelFisicas : TRTTIInspectorPanel;
       // IPanelOperacion : TRTTIInspectorPanel;
       // IPanelNoInfo : TRTTIInspectorPanel;
@@ -30,16 +30,16 @@ type
       ayudaProc : TAyudaProc;
 
       procedure SetValoresDefault();
-      procedure InicializarPanel(IPanel : TRTTIInspectorPanel);
       { esto es solo para el patron observador }
       procedure NotifyObservers;
       procedure RefrescaNoEditables(AInspectorPanel : TInspectorPanel);
-   protected
+      procedure preparaPaneles;
 
    public
       { Public declarations }
       constructor Create(AOwner : TComponent); override;
       procedure registraObjeto(nombre : string; objeto : TPersistent);
+      function CreaPanel(Caption : string) : TRTTIInspectorPanel;
       procedure seleccionaObjeto(v : TPersistent);
       procedure desregistraObjeto(v : TPersistent);
       procedure Oculta_paneles();
@@ -56,11 +56,6 @@ implementation
 
 {$R *.dfm}
 
-procedure TFrInspector.cmbObjetosSelect(Sender : TObject);
-begin
-seleccionaObjeto(TPersistent(cmbObjetos.Items.Objects[cmbObjetos.itemIndex]));
-end;
-
 constructor TFrInspector.Create(AOwner : TComponent);
 begin
 inherited;
@@ -72,26 +67,39 @@ cmbObjetos.Visible := true;
 // --
 BtnAyuda.Visible := true;
 Inspector.ShowHint := true;
-IPanelGenerales := Inspector.Panels.add;
-IPanelGenerales.Open := true;
-IPanelGenerales.Visible := false;
-InicializarPanel(IPanelGenerales);
+// creaPanel('Generales');
+BtnAyuda.Visible := False;
 
 // RegisterObserver(ObservadorModificacionPropuesta);
+end;
+
+procedure TFrInspector.cmbObjetosSelect(Sender : TObject);
+begin
+seleccionaObjeto(TPersistent(cmbObjetos.Items.Objects[cmbObjetos.itemIndex]));
 end;
 
 (* ========================================================================== *)
 { Limpiamos el Inspector }
 procedure TFrInspector.clear;
+var
+   idPanel : integer;
 begin
 cmbObjetos.clear;
-IPanelGenerales.RTTIComponent := nil;
+for idPanel := 0 to Inspector.Panels.Count - 1 do
+   begin
+   Inspector.Panels[idPanel].RTTIComponent := nil;
+   end;
 end;
 
 procedure TFrInspector.Oculta_paneles;
+var
+   idPanel : integer;
 begin
 cmbObjetos.itemIndex := -1;
-IPanelGenerales.Visible := false;
+for idPanel := 0 to Inspector.Panels.Count - 1 do
+   begin
+   Inspector.Panels[idPanel].Visible := False;
+   end;
 end;
 
 (* ========================================================================== *)
@@ -100,13 +108,19 @@ procedure TFrInspector.SetValoresDefault;
 begin
 Inspector.EditBtn.ButtonCaption := '···'; // ▪▪▪ ··· •••  …
 Inspector.EditBtn.ButtonWidth := 25;
-Inspector.CheckTextShow := false;
+Inspector.CheckTextShow := False;
 Inspector.Mode := imMultiPanelActive;
 end;
 
 { Inicializamos los paneles }
-procedure TFrInspector.InicializarPanel(IPanel : TRTTIInspectorPanel);
+function TFrInspector.CreaPanel(Caption : string) : TRTTIInspectorPanel;
+var
+   IPanel : TRTTIInspectorPanel;
 begin
+IPanel := Inspector.Panels.add;
+IPanel.Caption := Caption;
+IPanel.Open := true;
+IPanel.Visible := False;
 IPanel.Style := psProperties;
 IPanel.CaptionWidth := 150;
 IPanel.GridLines := true;
@@ -115,6 +129,123 @@ IPanel.EditBorderColor := clGray;
 IPanel.EditBox := true;
 IPanel.ItemHeight := 26;
 IPanel.AllowResize := true;
+result := IPanel;
+end;
+
+procedure TFrInspector.preparaPaneles;
+var
+   IPanel : TRTTIInspectorPanel;
+   idPanel : integer;
+   objeto : TPersistent;
+   par : TPair<string, TPropiedad>;
+   propiedad : TPropiedad;
+   interfazPropiedades : IPropiedades;
+   ListaOrdenadaDePropiedades : TListaPropiedades;
+   k : integer;
+   existeInterfaz : boolean;
+   s : string;
+   posDestino : integer;
+
+   procedure Swap(Collection : TInspectorItems; Index1, Index2 : integer);
+   var
+      Item1, Item2 : TCollectionItem;
+   begin
+   // Nota importante:
+   // TInspectorItems es del tipo TOwnedCollection donde Items[] es un arreglo de TCollectionItem, pero el setter (Items[] := ...) no está expuesto directamente.
+   // Entonces, el código anterior no compilará directamente sin un truco:
+   //        En realidad, necesitas intercambiar las propiedades manualmente o bien modificar el orden indirectamente,
+   //        ya que TOwnedCollection no permite reasignar Items[].
+   //
+   // Notas técnicas:
+   //       Item.Index := NewIndex reordena el elemento dentro de la colección.
+   //       Este enfoque funciona con cualquier clase basada en TOwnedCollection y TCollectionItem.
+   //       No necesitas acceder a Items[] := porque Delphi no lo permite directamente.
+
+   if (Collection = nil) or (Index1 = Index2) or (Index1 < 0) or (Index1 >= Collection.Count) or (Index2 < 0) or (Index2 >= Collection.Count) then
+      Exit;
+
+   Item1 := Collection.Items[Index1];
+   Item2 := Collection.Items[Index2];
+
+   // Reasignar los índices — esto los intercambia
+   Item1.Index := Index2;
+   Item2.Index := Index1;
+   end;
+
+begin
+if (cmbObjetos.itemIndex < 0) then
+   begin
+   Exit;
+   end;
+
+objeto := cmbObjetos.Items.Objects[cmbObjetos.itemIndex] as TPersistent;
+existeInterfaz := Supports(objeto, IPropiedades, interfazPropiedades);
+ayudaProc := interfazPropiedades.ayuda;
+BtnAyuda.Visible := assigned(ayudaProc);
+for idPanel := 0 to Inspector.Panels.Count - 1 do
+   begin
+   IPanel := Inspector.Panels[idPanel];
+   IPanel.RTTIComponent := objeto;
+   IPanel.Visible := False;
+   if existeInterfaz then
+      begin
+      IPanel.Visible := False;
+      // obtiene la lisata de propiedades para el panel idPanel ordenada por su posicion
+      ListaOrdenadaDePropiedades := interfazPropiedades.Propiedades.GetPropiedadesPorPanel(idPanel);
+
+      // ayudaProc := objeto as
+      if ListaOrdenadaDePropiedades.Count > 0 then
+         begin
+         IPanel.Visible := true;
+         // hace visibles unicamente las propuedades que estan registradas en ListaOrdenadaDePropiedades
+         // las restantes las oculta
+         posDestino := 0; // la primera propiedad debe ser colocada en la posicion 0 del IPanel.items
+
+         // para cada propiedad de listaOrdenada k = 0,1,2,... localizar la posicion correspondiente en IPanel.items e intercambiar
+         // para cada propiedad del panel determinar k := 0,1,2,...  si esta en la lista ordenada en la posicion posDestino de ser asi intercambiar
+         for k := 0 to IPanel.Items.Count - 1 do
+            begin
+            propiedad := ListaOrdenadaDePropiedades[IPanel.Items[k].Caption];
+            if propiedad <> nil then
+               begin
+               Swap(IPanel.Items, k, propiedad.Posicion);
+               end;
+            end;
+
+         //
+         //
+         //
+         //
+         // for k := 0 to ListaOrdenadaDePropiedades.count-1 do
+         // begin
+         // propiedad := ListaOrdenadaDePropiedades.Items[0];
+         // posDestino := IPanel.Items
+         // end;
+
+         for k := 0 to IPanel.Items.Count - 1 do
+            begin
+            // obtiene la propiedad asociada al caption (el nombre de la propiedad es el caption en el inspector)
+            propiedad := ListaOrdenadaDePropiedades[IPanel.Items[k].Caption];
+            // busca la propiedad en el IPanel
+            IPanel.Items[k].Visible := propiedad <> nil;
+            // si la propiedad existe aplica las especificaciones de la propiedad
+            if propiedad <> nil then
+               begin
+               IPanel.Items[k].Caption := propiedad.Caption; // ojo aqui se cambio el caption de la propiedad
+               s := IPanel.Items[k].Name;
+               if propiedad.hint <> '' then
+                  IPanel.Items[k].hint := propiedad.hint
+               else
+                  IPanel.Items[k].hint := propiedad.Caption;
+               end;
+
+            end;
+         // coloca las propiedades visibles hasta arriba de la colecccion (IPanel.Items[])
+
+         end
+      end;
+   end;
+
 end;
 
 procedure TFrInspector.BtnAyudaClick(Sender : TObject);
@@ -126,46 +257,19 @@ end;
 procedure TFrInspector.seleccionaObjeto(v : TPersistent);
 
 var
-   par : TPair<string,TPropiedad>;
+   par : TPair<string, TPropiedad>;
    propiedad : TPropiedad;
    interfazPropiedades : IPropiedades;
-   listaPropiedades : TListaPropiedades;
-   k : Integer;
-
-   procedure registraHints(IPanel : TRTTIInspectorPanel);
-   var
-      k : Integer;
-   begin
-   // establece como hint el texto de caption
-   for k := 0 to IPanel.Items.Count - 1 do
-      begin
-      IPanel.Items[k].hint := IPanel.Items[k].caption;
-      end;
-   end;
+   diccionarioPropiedades : TDiccionarioPropiedades;
+   k : integer;
 
 begin
 if v <> nil then
    begin
    if cmbObjetos.Items.IndexOfObject(v) < 0 then
-      exit;
+      Exit;
    cmbObjetos.itemIndex := cmbObjetos.Items.IndexOfObject(v);
-   IPanelGenerales.Visible := true;
-   IPanelGenerales.caption := 'Generales';
-
-   IPanelGenerales.RTTIComponent := v;
-   if Supports(v, IPropiedades, interfazPropiedades) then
-      begin
-      listaPropiedades := interfazPropiedades.Propiedades;
-      /// para cada propiedad del objeto decide si:
-      /// es visible siempre que exista en la listaPropiedades
-      ///   es invisible si no está en ella
-      for k := 0 to IPanelGenerales.items.count-1 do
-          begin
-          propiedad := listaPropiedades.buscaPropiedadPorNombre(IPanelGenerales.items[k].Name);
-          IPanelGenerales.items[k].Visible := propiedad <>nil;
-          end;
-      end;
-   registraHints(IPanelGenerales);
+   preparaPaneles;
    end;
 end;
 
@@ -189,7 +293,7 @@ end;
 { Desregistro del objeto }
 procedure TFrInspector.desregistraObjeto(v : TPersistent);
 var
-   k : Integer;
+   k : integer;
 begin
 //
 Oculta_paneles();
