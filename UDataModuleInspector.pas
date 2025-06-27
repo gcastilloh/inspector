@@ -6,9 +6,9 @@ uses
   System.SysUtils, System.Classes, InspectorBar, InspLinks;
 
 type
-  TDataModule2 = class(TDataModule)
+  TDM = class(TDataModule)
     EditFlotante2dec: TAEInspectorEditLink;
-    EditEntero: TAEInspectorEditLink;
+    EditEnteroPositivo: TAEInspectorEditLink;
   private
     { Private declarations }
   public
@@ -16,7 +16,7 @@ type
   end;
 
 var
-  DataModule2: TDataModule2;
+  DM: TDM;
 
 implementation
 

@@ -75,6 +75,8 @@ begin
 if not existeLaPropiedad(Nombre) then
    FDiccionario.Add(Nombre, Prop)
 else
+   /// cualquier popiedad solo puede registrarse una sola vez
+   /// y por lo tanto solo puede aparecer en un solo panel no se permite que se repitan propiedades en varios paneles
    raise Exception.CreateFmt('Propiedad "%s" ya fue registrada previamente', [Nombre]);
 end;
 

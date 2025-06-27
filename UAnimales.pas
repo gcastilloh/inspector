@@ -56,7 +56,7 @@ type
 
 implementation
 
-uses Vcl.dialogs;
+uses Vcl.dialogs, UDataModuleInspector;
 
 { TAnimal }
 
@@ -143,9 +143,9 @@ begin
   // Por eso usamos directamente FListaGato, que es una variable de clase compartida.
   FDiccionarioPropiedades := TDiccionarioPropiedades.Create;
   // Aquí se agregan las propiedades específicas para Gato
-  FDiccionarioPropiedades.SetPropiedad('Nombre', 0, 'Nombre', 1);
+  FDiccionarioPropiedades.SetPropiedad('Nombre', 0, 'Nombre', 0);
   FDiccionarioPropiedades.SetPropiedad('Color', 0, 'Color', 2);
-  FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 0);
+  FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 1, DM.EditEnteroPositivo);
   FDiccionarioPropiedades.SetPropiedad('Humor', 1, 'Humor', 0);
 end;
 

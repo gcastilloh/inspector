@@ -15,8 +15,8 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object BtPerro: TButton
-    Left = 317
-    Top = 28
+    Left = 149
+    Top = 21
     Width = 75
     Height = 25
     Caption = 'Perro'
@@ -24,233 +24,34 @@ object Form1: TForm1
     OnClick = BtPerroClick
   end
   object btnGato: TButton
-    Left = 398
-    Top = 28
+    Left = 29
+    Top = 21
     Width = 75
     Height = 25
     Caption = 'Gato'
     TabOrder = 1
     OnClick = btnGatoClick
   end
-  object RTTIInspectorBar1: TRTTIInspectorBar
-    Left = 0
-    Top = 0
-    Width = 180
-    Height = 299
-    AcceptFiles = False
-    AutoAdvance = False
-    Align = alLeft
-    CheckTrue = 'True'
-    CheckFalse = 'False'
-    Ellipsis = False
-    Flat = False
-    HelpPanel.BevelInner = bvLowered
-    HelpPanel.BevelOuter = bvNone
-    HelpPanel.BevelWidth = 0
-    HelpPanel.Font.Charset = DEFAULT_CHARSET
-    HelpPanel.Font.Color = clWindowText
-    HelpPanel.Font.Height = -11
-    HelpPanel.Font.Name = 'Tahoma'
-    HelpPanel.Font.Style = []
-    HelpPanel.Height = 0
-    HelpPanel.Visible = False
-    PanelCaption.ActiveFont.Charset = DEFAULT_CHARSET
-    PanelCaption.ActiveFont.Color = clWindowText
-    PanelCaption.ActiveFont.Height = -11
-    PanelCaption.ActiveFont.Name = 'Tahoma'
-    PanelCaption.ActiveFont.Style = []
-    PanelCaption.Button = False
-    PanelCaption.Color = clBtnFace
-    PanelCaption.Font.Charset = DEFAULT_CHARSET
-    PanelCaption.Font.Color = clWindowText
-    PanelCaption.Font.Height = -11
-    PanelCaption.Font.Name = 'Tahoma'
-    PanelCaption.Font.Style = []
-    PanelCaption.SideDisplay = False
-    PanelCaption.SideWidth = 20
-    PanelCaption.OpenClosePosition = ocpLeft
-    PanelCaption.OpenCloseGraphic = ocgNone
-    PanelCaption.ShadeGrain = 32
-    PanelCaption.ShadeType = stNormal
-    PanelCaption.VAlignment = vaTop
-    Panels = <
-      item
-        AllowResize = False
-        Background = pbSolid
-        ButtonDownColor = clSilver
-        Caption = 'hola'
-        CaptionWidth = 60
-        CaptionColor = clNone
-        CaptionFont.Charset = DEFAULT_CHARSET
-        CaptionFont.Color = clWindowText
-        CaptionFont.Height = -11
-        CaptionFont.Name = 'Tahoma'
-        CaptionFont.Style = []
-        Color = clGray
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        EditBorderColor = clNone
-        GradientDirection = gdVertical
-        GradientEnd = clSilver
-        GradientStart = clWhite
-        GradientSteps = 20
-        GridLineColor = clGray
-        GridLines = True
-        Hint = 'test'
-        HoverCaption = False
-        HoverFullWidth = False
-        HoverIconColor = clNone
-        HoverIconBorderColor = clNone
-        HoverIconDownColor = clNone
-        HoverIconDownColorTo = clNone
-        ImageAlign = iaLeft
-        LabelEdit = False
-        ModifiedFont.Charset = DEFAULT_CHARSET
-        ModifiedFont.Color = clNavy
-        ModifiedFont.Height = -11
-        ModifiedFont.Name = 'Tahoma'
-        ModifiedFont.Style = [fsBold]
-        MultiPanelState = mpsOpen
-        ShortCut = 0
-        VariableItemHeight = False
-        ItemHeight = 26
-        Items = <
-          item
-            BoolValue = False
-            Caption = 'Item 0'
-            ColorValue = clBlack
-            FontValue.Charset = DEFAULT_CHARSET
-            FontValue.Color = clWindowText
-            FontValue.Height = -11
-            FontValue.Name = 'Tahoma'
-            FontValue.Style = []
-            Height = 48
-            Indent = 0
-            IntValue = 0
-            Level = 0
-            Modified = False
-            PropertyType = ptInteger
-            ReadOnly = False
-            ShortCut = 0
-            TextValue = '0'
-          end
-          item
-            BoolValue = False
-            Caption = 'Item 1'
-            ColorValue = clBlack
-            FontValue.Charset = DEFAULT_CHARSET
-            FontValue.Color = clWindowText
-            FontValue.Height = -11
-            FontValue.Name = 'Tahoma'
-            FontValue.Style = []
-            Height = 48
-            Indent = 0
-            IntValue = 0
-            Level = 0
-            Modified = False
-            PropertyType = ptInteger
-            ReadOnly = False
-            ShortCut = 0
-            TextValue = '0'
-          end
-          item
-            BoolValue = False
-            Caption = 'Item 2'
-            ColorValue = clBlack
-            FontValue.Charset = DEFAULT_CHARSET
-            FontValue.Color = clWindowText
-            FontValue.Height = -11
-            FontValue.Name = 'Tahoma'
-            FontValue.Style = []
-            Hint = 'holis'
-            Height = 48
-            Indent = 0
-            IntValue = 0
-            Level = 0
-            Modified = False
-            PropertyType = ptInteger
-            ReadOnly = False
-            ShortCut = 0
-            TextValue = '0'
-          end>
-        ShowModified = False
-        Style = psProperties
-        Tag = 0
-        TopItem = 0
-        WordWrap = False
-        WordWrapCaption = False
-        SelectColorTo = clNone
-        SelectDownColor = clBlack
-      end
-      item
-        AllowResize = False
-        Background = pbSolid
-        ButtonDownColor = clSilver
-        CaptionWidth = 60
-        CaptionColor = clNone
-        CaptionFont.Charset = DEFAULT_CHARSET
-        CaptionFont.Color = clWindowText
-        CaptionFont.Height = -11
-        CaptionFont.Name = 'Tahoma'
-        CaptionFont.Style = []
-        Color = clGray
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        EditBorderColor = clNone
-        GradientDirection = gdVertical
-        GradientEnd = clSilver
-        GradientStart = clWhite
-        GradientSteps = 20
-        GridLineColor = clGray
-        GridLines = False
-        HoverCaption = False
-        HoverFullWidth = False
-        HoverIconColor = clNone
-        HoverIconBorderColor = clNone
-        HoverIconDownColor = clNone
-        HoverIconDownColorTo = clNone
-        ImageAlign = iaLeft
-        LabelEdit = False
-        ModifiedFont.Charset = DEFAULT_CHARSET
-        ModifiedFont.Color = clNavy
-        ModifiedFont.Height = -11
-        ModifiedFont.Name = 'Tahoma'
-        ModifiedFont.Style = [fsBold]
-        MultiPanelState = mpsClose
-        ShortCut = 0
-        VariableItemHeight = False
-        ItemHeight = 26
-        Items = <>
-        ShowModified = False
-        Style = psProperties
-        Tag = 0
-        TopItem = 0
-        WordWrap = False
-        WordWrapCaption = False
-        SelectColorTo = clNone
-        SelectDownColor = clBlack
-      end>
-    ShowEditorAlways = False
-    ShowHint = True
-    TabStop = True
-    TabOrder = 2
-    TopPanel = 0
-    Version = '1.8.8.0'
-    DefaultGradientDirection = gdVertical
-  end
   inline FrInspector1: TFrInspector
     Left = 315
-    Top = 59
+    Top = 0
     Width = 320
-    Height = 240
-    TabOrder = 3
+    Height = 299
+    Align = alRight
+    TabOrder = 2
     ExplicitLeft = 315
     ExplicitTop = 59
+    inherited Panel3: TPanel
+      Height = 278
+      inherited Panel2: TPanel
+        Height = 240
+        inherited Inspector: TRTTIInspectorBar
+          Height = 238
+        end
+      end
+      inherited BtnAyuda: TButton
+        Top = 241
+      end
+    end
   end
 end

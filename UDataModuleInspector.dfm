@@ -1,4 +1,4 @@
-object DataModule2: TDataModule2
+object DM: TDM
   OldCreateOrder = False
   Height = 313
   Width = 414
@@ -22,7 +22,7 @@ object DataModule2: TDataModule2
     Left = 80
     Top = 32
   end
-  object EditEntero: TAEInspectorEditLink
+  object EditEnteroPositivo: TAEInspectorEditLink
     Tag = 0
     EditStyle = esInplace
     PopupWidth = 0
@@ -36,10 +36,10 @@ object DataModule2: TDataModule2
     EditAlign = eaLeft
     EditColor = clWhite
     ModifiedColor = clRed
-    EditType = etNumeric
+    EditType = etFloat
     ShowModified = False
     Precision = 0
-    Left = 184
-    Top = 32
+    Left = 64
+    Top = 104
   end
 end

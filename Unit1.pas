@@ -8,7 +8,6 @@ type
    TForm1 = class(TForm)
       BtPerro : TButton;
       btnGato : TButton;
-    RTTIInspectorBar1: TRTTIInspectorBar;
     FrInspector1: TFrInspector;
       procedure BtPerroClick(Sender : TObject);
       procedure btnGatoClick(Sender : TObject);
