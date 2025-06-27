@@ -8,10 +8,10 @@ type
    TForm1 = class(TForm)
       BtPerro : TButton;
       btnGato : TButton;
-    FrInspector1: TFrInspector;
+      FrInspector1 : TFrInspector;
       procedure BtPerroClick(Sender : TObject);
       procedure btnGatoClick(Sender : TObject);
-    procedure FormCreate(Sender: TObject);
+      procedure FormCreate(Sender : TObject);
    private
       { Private declarations }
    public
@@ -49,7 +49,7 @@ Perro.Raza := RazaAleatoria;
 FrInspector1.registraObjeto(Perro.Nombre, Perro);
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.FormCreate(Sender : TObject);
 begin
 FrInspector1.creaPanel('General');
 FrInspector1.creaPanel('Especificas');

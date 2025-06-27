@@ -153,13 +153,13 @@ var
    // Nota importante:
    // TInspectorItems es del tipo TOwnedCollection donde Items[] es un arreglo de TCollectionItem, pero el setter (Items[] := ...) no está expuesto directamente.
    // Entonces, el código anterior no compilará directamente sin un truco:
-   //        En realidad, necesitas intercambiar las propiedades manualmente o bien modificar el orden indirectamente,
-   //        ya que TOwnedCollection no permite reasignar Items[].
+   // En realidad, necesitas intercambiar las propiedades manualmente o bien modificar el orden indirectamente,
+   // ya que TOwnedCollection no permite reasignar Items[].
    //
    // Notas técnicas:
-   //       Item.Index := NewIndex reordena el elemento dentro de la colección.
-   //       Este enfoque funciona con cualquier clase basada en TOwnedCollection y TCollectionItem.
-   //       No necesitas acceder a Items[] := porque Delphi no lo permite directamente.
+   // Item.Index := NewIndex reordena el elemento dentro de la colección.
+   // Este enfoque funciona con cualquier clase basada en TOwnedCollection y TCollectionItem.
+   // No necesitas acceder a Items[] := porque Delphi no lo permite directamente.
 
    if (Collection = nil) or (Index1 = Index2) or (Index1 < 0) or (Index1 >= Collection.Count) or (Index2 < 0) or (Index2 >= Collection.Count) then
       Exit;
@@ -219,7 +219,7 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
             // obtiene la propiedad asociada al caption (el nombre de la propiedad es el caption en el inspector)
             propiedad := ListaOrdenadaDePropiedades[IPanel.Items[k].Caption];
             // si la propiedad existe aplica las especificaciones de la propiedad
-            IPanel.Items[k].Visible := propiedad<>nil;
+            IPanel.Items[k].Visible := propiedad <> nil;
             if propiedad <> nil then
                begin
                IPanel.Items[k].Caption := propiedad.Caption; // ojo aqui se cambio el caption de la propiedad

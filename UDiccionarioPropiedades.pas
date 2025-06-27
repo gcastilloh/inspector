@@ -2,6 +2,7 @@ unit UDiccionarioPropiedades;
 
 interface
 
+/// TPropiedad: Define las caracteristicas con las que se mostrará una propiedad en el inspector
 /// TDiccionarioPropiedades: Diccionario de propiedades que cada objeto que se registra en el inspector debe poseer
 /// IPropiedades: Interface que todo objeto debe cumplir para ser registrado en el inspector
 /// TListaPropiedades: Lista extraida del TDiccionarioPropiedades que contiene las propiedades para un panel en particular y oredenadas de acuerdo a cómo deben aparecen en el inspector
@@ -23,8 +24,7 @@ type
       fVisible : boolean;
       fPropertyType : TPropertyType;
       fValueisEmpty : boolean;
-    fhint: string;
-
+      fhint : string;
 
       function GetValidaisNull() : boolean;
 
@@ -34,8 +34,8 @@ type
       CanModify : boolean;
       // esta propiedad sirve para indicarle al sistema que el valor inicial de la propiedad debe ser utilizada en el editor
       // ver el caso de MomentoI que requiere un valor inicial
-      //        if not PropiedadZ.ValueisEmpty then
-      //            IPanel.Items[POS].TextValue := valorDfault;
+      // if not PropiedadZ.ValueisEmpty then
+      // IPanel.Items[POS].TextValue := valorDfault;
 
       property ValueisEmpty : boolean read fValueisEmpty write fValueisEmpty;
       property PropertyName : string read fPropertyName write fPropertyName;
@@ -73,7 +73,7 @@ type
       procedure agregarPropiedad(const Nombre : string; Prop : TPropiedad);
       function obtenerPropiedad(const Nombre : string) : TPropiedad;
       procedure retirarPropiedad(const Nombre : string);
-      function existeLaPropiedad(const Nombre : string) : Boolean;
+      function existeLaPropiedad(const Nombre : string) : boolean;
       procedure Clear;
       // Iterador para for..in (retorna las propiedades)
       function GetEnumerator : TDictionary<string, TPropiedad>.TValueEnumerator;
@@ -82,8 +82,8 @@ type
       // diferentes maneras de agregar una propiedad y su nombre
       function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad; overload;
       function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; EditLink : TAEInspectorEditLink) : TPropiedad; overload;
-      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : Boolean; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad; overload;
-      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : Boolean; EditLink : TAEInspectorEditLink) : TPropiedad; overload;
+      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad; overload;
+      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink) : TPropiedad; overload;
       function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; fv : TValidaFuncion) : TPropiedad; overload;
       function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer) : TPropiedad; overload;
 
@@ -113,9 +113,6 @@ uses System.Generics.Defaults;
 /// ----------------------------------------------------------------------------------------
 /// ----------------------------------------------------------------------------------------
 
-
-{ TPropiedad }
-// @@ Constructores @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 constructor TPropiedad.CreateP(PropertyName : string; ID_PANEL : Integer; Caption : string; Posicion : Integer; Visible : boolean; EditLink : TAEInspectorEditLink;FuncionValidacion : TValidaFuncion);
 begin
 self.PropertyName := PropertyName;
@@ -127,7 +124,7 @@ self.Posicion := Posicion;
 self.EditLink := EditLink;
 self.FuncionValidacion := FuncionValidacion;
 
-// Asignaciones Default
+// Asignación de valores por omisión
 self.ValueisEmpty := False;
 self.CanModify := True;
 end;
@@ -150,9 +147,6 @@ else
    inherited;
 end;
 
-// @@ Propiedades   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-(* ========================================================================== *)
 function TPropiedad.GetValidaisNull : boolean;
 begin
 if assigned(FuncionValidacion) then
@@ -163,7 +157,7 @@ end;
 
 /// ----------------------------------------------------------------------------------------
 /// ----------------------------------------------------------------------------------------
-/// TListaPropiedades
+/// TDiccionarioPropiedades
 /// ----------------------------------------------------------------------------------------
 /// ----------------------------------------------------------------------------------------
 
@@ -179,7 +173,7 @@ FDiccionario.Free;
 inherited;
 end;
 
-function TDiccionarioPropiedades.existeLaPropiedad(const Nombre : string) : Boolean;
+function TDiccionarioPropiedades.existeLaPropiedad(const Nombre : string) : boolean;
 begin
 Result := FDiccionario.ContainsKey(Nombre);
 end;
@@ -236,7 +230,6 @@ for Propiedad in FDiccionario.Values do
    if Propiedad.ID_PANEL = APanelID then
       Result.Add(Propiedad);
    end;
-
 // Ordenar por Pos
 Result.Sort(TComparer<TPropiedad>.Construct(function(const Left, Right : TPropiedad) : Integer
    begin
@@ -245,7 +238,7 @@ Result.Sort(TComparer<TPropiedad>.Construct(function(const Left, Right : TPropie
 end;
 
 // Con propiedad Visible y con Funcion de Validacion
-function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : Boolean; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad;
+function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad;
 var
    Propiedad : TPropiedad;
 begin
@@ -256,7 +249,7 @@ end;
 
 (* ========================================================================== *)
 // Con propiedad Visible y sin Funcion de Validacion
-function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : Boolean; EditLink : TAEInspectorEditLink) : TPropiedad;
+function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink) : TPropiedad;
 begin
 Result := SetPropiedad(PropertyName, ID_PANEL, PropertyCaption, POS, Visible, EditLink, nil);
 end;
@@ -290,14 +283,16 @@ Result := SetPropiedad(PropertyName, ID_PANEL, PropertyCaption, POS, True, EditL
 end;
 
 /// ----------------------------------------------------------------------------------------
+/// ----------------------------------------------------------------------------------------
 /// TListaPropiedades
+/// ----------------------------------------------------------------------------------------
 /// ----------------------------------------------------------------------------------------
 
 function TListaPropiedades.GetByNombre(const ANombre : string) : TPropiedad;
 var
    P : TPropiedad;
 begin
-for P in Self do
+for P in self do
    if SameText(P.PropertyName, ANombre) then
       Exit(P);
 Result := nil;
@@ -307,7 +302,7 @@ function TListaPropiedades.BuscarPorPos(const APos : Integer) : TPropiedad;
 var
    P : TPropiedad;
 begin
-for P in Self do
+for P in self do
    if P.Posicion = APos then
       Exit(P);
 Result := nil;

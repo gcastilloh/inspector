@@ -40,17 +40,21 @@ object Form1: TForm1
     Align = alRight
     TabOrder = 2
     ExplicitLeft = 315
-    ExplicitTop = 59
+    ExplicitHeight = 299
     inherited Panel3: TPanel
       Height = 278
+      ExplicitHeight = 278
       inherited Panel2: TPanel
         Height = 240
+        ExplicitHeight = 240
         inherited Inspector: TRTTIInspectorBar
           Height = 238
+          ExplicitHeight = 238
         end
       end
       inherited BtnAyuda: TButton
         Top = 241
+        ExplicitTop = 241
       end
     end
   end
