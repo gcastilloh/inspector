@@ -3,7 +3,7 @@
 interface
 
 uses Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, InspectorBar, RTTIInspectorBar, Vcl.ExtCtrls, Generics.Collections, UPatronObservador,
-   UDiccionarioPropiedades, UPropiedad, UListaPropiedades, UFuncionesCallBack;
+   UDiccionarioPropiedades;
 
 type
 

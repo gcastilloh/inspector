@@ -2,7 +2,7 @@
 
 interface
 
-uses Classes, UFuncionesCallBack, UDiccionarioPropiedades, UPropiedad;
+uses Classes, UDiccionarioPropiedades;
 
 type
   TAnimal = class(TPersistent, IPropiedades)
@@ -56,7 +56,7 @@ type
 
 implementation
 
-uses Vcl.dialogs, UDataModuleInspector;
+uses Vcl.dialogs;
 
 { TAnimal }
 
@@ -145,7 +145,7 @@ begin
   // Aquí se agregan las propiedades específicas para Gato
   FDiccionarioPropiedades.SetPropiedad('Nombre', 0, 'Nombre', 0);
   FDiccionarioPropiedades.SetPropiedad('Color', 0, 'Color', 2);
-  FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 1, DM.EditEnteroPositivo);
+  FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 1, nil);
   FDiccionarioPropiedades.SetPropiedad('Humor', 1, 'Humor', 0);
 end;
 

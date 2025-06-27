@@ -110,15 +110,7 @@
         </DCCReference>
         <DCCReference Include="UPatronObservador.pas"/>
         <DCCReference Include="UAnimales.pas"/>
-        <DCCReference Include="UPropiedad.pas"/>
         <DCCReference Include="UDiccionarioPropiedades.pas"/>
-        <DCCReference Include="UFuncionesCallBack.pas"/>
-        <DCCReference Include="UDataModuleInspector.pas">
-            <Form>DataModule2</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="UListaPropiedades.pas"/>
         <DCCReference Include="UFuncionesAuxiliaresDatos.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
