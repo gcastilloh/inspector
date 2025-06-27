@@ -201,7 +201,7 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
          // las restantes las oculta
          posDestino := 0; // la primera propiedad debe ser colocada en la posicion 0 del IPanel.items
 
-         // para cada propiedad de listaOrdenada k = 0,1,2,... localizar la posicion correspondiente en IPanel.items e intercambiar
+         // coloca las popiedades visibles de la lista ordenada hasta arriba del panel
          // para cada propiedad del panel determinar k := 0,1,2,...  si esta en la lista ordenada en la posicion posDestino de ser asi intercambiar
          for k := 0 to IPanel.Items.Count - 1 do
             begin
@@ -209,26 +209,17 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
             if propiedad <> nil then
                begin
                Swap(IPanel.Items, k, propiedad.Posicion);
-               end;
+               IPanel.Items[propiedad.Posicion].Visible := true;
+               end
             end;
 
-         //
-         //
-         //
-         //
-         // for k := 0 to ListaOrdenadaDePropiedades.count-1 do
-         // begin
-         // propiedad := ListaOrdenadaDePropiedades.Items[0];
-         // posDestino := IPanel.Items
-         // end;
-
+         // establece las caracteristicas de las propiedades visibles del panel
          for k := 0 to IPanel.Items.Count - 1 do
             begin
             // obtiene la propiedad asociada al caption (el nombre de la propiedad es el caption en el inspector)
             propiedad := ListaOrdenadaDePropiedades[IPanel.Items[k].Caption];
-            // busca la propiedad en el IPanel
-            IPanel.Items[k].Visible := propiedad <> nil;
             // si la propiedad existe aplica las especificaciones de la propiedad
+            IPanel.Items[k].Visible := propiedad<>nil;
             if propiedad <> nil then
                begin
                IPanel.Items[k].Caption := propiedad.Caption; // ojo aqui se cambio el caption de la propiedad
@@ -240,8 +231,6 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
                end;
 
             end;
-         // coloca las propiedades visibles hasta arriba de la colecccion (IPanel.Items[])
-
          end
       end;
    end;

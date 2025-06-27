@@ -4,10 +4,10 @@
     <Transaction>2025/06/24 17:46:11.000.570,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>2025/06/24 18:43:11.000.277,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
     <Transaction>2025/06/24 18:44:17.000.237,C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\Project3.dproj=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\Project3.dproj</Transaction>
-    <Transaction>2025/06/24 18:44:30.000.419,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UPrincipal.pas</Transaction>
     <Transaction>2025/06/24 18:44:30.000.333,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UPersona.pas</Transaction>
-    <Transaction>2025/06/24 18:44:30.000.299,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UPatronObservador.pas</Transaction>
     <Transaction>2025/06/24 18:44:30.000.259,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\Unit1.pas</Transaction>
+    <Transaction>2025/06/24 18:44:30.000.419,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UPrincipal.pas</Transaction>
+    <Transaction>2025/06/24 18:44:30.000.299,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UPatronObservador.pas</Transaction>
     <Transaction>2025/06/24 18:44:30.000.165,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UFrInspector.pas</Transaction>
     <Transaction>2025/06/24 18:52:03.000.075,C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UPrincipal.pas=</Transaction>
     <Transaction>2025/06/24 18:56:18.000.896,C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UPersona.pas=</Transaction>
@@ -27,5 +27,7 @@
     <Transaction>2025/06/26 11:35:14.408,C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UDiccionarioPropiedades.pas=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UListaPropiedades.pas</Transaction>
     <Transaction>2025/06/26 13:19:29.193,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\Unit2.pas</Transaction>
     <Transaction>2025/06/26 13:21:11.464,C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UListaPropiedades.pas=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\Unit2.pas</Transaction>
+    <Transaction>2025/06/26 21:04:40.248,=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\Unit2.pas</Transaction>
+    <Transaction>2025/06/26 21:04:52.426,C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\UFuncionesAuxiliaresDatos.pas=C:\Users\desarrollo\Documents\Embarcadero\Studio\Projects\inspector\Unit2.pas</Transaction>
   </Transactions>
 </BorlandProject>

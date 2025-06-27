@@ -119,6 +119,7 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="UListaPropiedades.pas"/>
+        <DCCReference Include="UFuncionesAuxiliaresDatos.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

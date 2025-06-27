@@ -42,6 +42,7 @@ type
   TGato = class(TAnimal)
   private
     FColor: string;
+    fHumor: string;
     class var FDiccionarioPropiedades: TDiccionarioPropiedades;
     function GetPropiedades: TDiccionarioPropiedades; override;
   public
@@ -50,6 +51,7 @@ type
     class destructor ClassDestroy;
   published
     property Color: string read FColor write FColor;
+    property humor: string read fHumor write fHumor;
   end;
 
 implementation
@@ -144,6 +146,7 @@ begin
   FDiccionarioPropiedades.SetPropiedad('Nombre', 0, 'Nombre', 1);
   FDiccionarioPropiedades.SetPropiedad('Color', 0, 'Color', 2);
   FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 0);
+  FDiccionarioPropiedades.SetPropiedad('Humor', 1, 'Humor', 0);
 end;
 
 class destructor TGato.ClassDestroy;

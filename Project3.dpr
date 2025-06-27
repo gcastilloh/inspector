@@ -10,7 +10,8 @@ uses
   UDiccionarioPropiedades in 'UDiccionarioPropiedades.pas',
   UFuncionesCallBack in 'UFuncionesCallBack.pas',
   UDataModuleInspector in 'UDataModuleInspector.pas' {DataModule2: TDataModule},
-  UListaPropiedades in 'UListaPropiedades.pas';
+  UListaPropiedades in 'UListaPropiedades.pas',
+  UFuncionesAuxiliaresDatos in 'UFuncionesAuxiliaresDatos.pas';
 
 {$R *.res}
 
