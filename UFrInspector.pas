@@ -40,7 +40,7 @@ type
       constructor Create(AOwner : TComponent); override;
       procedure registraObjeto(nombre : string; objeto : TPersistent);
       function CreaPanel(Caption : string) : TRTTIInspectorPanel;
-      procedure seleccionaObjeto(v : TPersistent);
+      procedure seleccionaObjeto(objeto : TPersistent);
       procedure desregistraObjeto(v : TPersistent);
       procedure Oculta_paneles();
       procedure clear;
@@ -54,12 +54,15 @@ type
 
 implementation
 
+uses AdvEdit;
+
 {$R *.dfm}
 
 constructor TFrInspector.Create(AOwner : TComponent);
 begin
 inherited;
 FObserverList := TList<IObservadorModificacionPropuesta>.Create;
+setValoresDefault();
 
 cmbObjetos.Text := '';
 cmbObjetos.Visible := true;
@@ -137,14 +140,12 @@ var
    IPanel : TRTTIInspectorPanel;
    idPanel : integer;
    objeto : TPersistent;
-   par : TPair<string, TPropiedad>;
    propiedad : TPropiedad;
    interfazPropiedades : IPropiedades;
    ListaOrdenadaDePropiedades : TListaPropiedades;
    k : integer;
    existeInterfaz : boolean;
-   s : string;
-   posDestino : integer;
+   cadenaAux : string;
 
    procedure Swap(Collection : TInspectorItems; Index1, Index2 : integer);
    var
@@ -197,9 +198,6 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
       if ListaOrdenadaDePropiedades.Count > 0 then
          begin
          IPanel.Visible := true;
-         // hace visibles unicamente las propuedades que estan registradas en ListaOrdenadaDePropiedades
-         // las restantes las oculta
-         posDestino := 0; // la primera propiedad debe ser colocada en la posicion 0 del IPanel.items
 
          // coloca las popiedades visibles de la lista ordenada hasta arriba del panel
          // para cada propiedad del panel determinar k := 0,1,2,...  si esta en la lista ordenada en la posicion posDestino de ser asi intercambiar
@@ -209,6 +207,8 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
             if propiedad <> nil then
                begin
                Swap(IPanel.Items, k, propiedad.Posicion);
+               // hace visibles unicamente las propuedades que estan registradas en ListaOrdenadaDePropiedades
+               // las restantes las oculta
                IPanel.Items[propiedad.Posicion].Visible := true;
                end
             end;
@@ -222,8 +222,15 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
             IPanel.Items[k].Visible := propiedad <> nil;
             if propiedad <> nil then
                begin
-               IPanel.Items[k].Caption := propiedad.Caption; // ojo aqui se cambio el caption de la propiedad
-               s := IPanel.Items[k].Name;
+               IPanel.Items[k].Caption := propiedad.Caption; // ojo aqui se cambió el caption de la propiedad
+               if propiedad.EditLink <> nil then
+                  begin
+                  cadenaAux := IPanel.Items[k].TextValue;
+                  IPanel.Items[k].PropertyType := ptCustom;
+                  IPanel.Items[k].EditLink := propiedad.EditLink;
+                  IPanel.Items[k].TextValue := cadenaAux;
+                  end;
+               IPanel.Items[k].ReadOnly := not propiedad.CanModify;
                if propiedad.hint <> '' then
                   IPanel.Items[k].hint := propiedad.hint
                else
@@ -243,21 +250,13 @@ if assigned(ayudaProc) then
    ayudaProc();
 end;
 
-procedure TFrInspector.seleccionaObjeto(v : TPersistent);
-
-var
-   par : TPair<string, TPropiedad>;
-   propiedad : TPropiedad;
-   interfazPropiedades : IPropiedades;
-   diccionarioPropiedades : TDiccionarioPropiedades;
-   k : integer;
-
+procedure TFrInspector.seleccionaObjeto(objeto : TPersistent);
 begin
-if v <> nil then
+if objeto <> nil then
    begin
-   if cmbObjetos.Items.IndexOfObject(v) < 0 then
+   if cmbObjetos.Items.IndexOfObject(objeto) < 0 then
       Exit;
-   cmbObjetos.itemIndex := cmbObjetos.Items.IndexOfObject(v);
+   cmbObjetos.itemIndex := cmbObjetos.Items.IndexOfObject(objeto);
    preparaPaneles;
    end;
 end;
@@ -267,8 +266,6 @@ end;
 { solamente registra Dispositivos }
 { esete metodo solo registra el objeto en el Combo pero NO LO SELECCIONA PORO LO QUE DEBERA DESPUES selectObjeto }
 procedure TFrInspector.registraObjeto(nombre : string; objeto : TPersistent);
-var
-   IPanel : TRTTIInspectorPanel;
 begin
 /// Control del Combo box////////////////////////////////////////////////////
 if cmbObjetos.Items.IndexOfObject(objeto) < 0 then

@@ -7,12 +7,22 @@ interface
 /// IPropiedades: Interface que todo objeto debe cumplir para ser registrado en el inspector
 /// TListaPropiedades: Lista extraida del TDiccionarioPropiedades que contiene las propiedades para un panel en particular y oredenadas de acuerdo a cómo deben aparecen en el inspector
 
-uses Generics.Collections, Classes, System.SysUtils, InspLinks, InspectorBar;
+uses Classes, Types, Generics.Collections, System.SysUtils, Vcl.graphics, InspLinks, InspectorBar, advEdit;
 
 type
 
    TValidaFuncion = function(PropertyName : string; Value : string) : boolean of object;
    TAyudaProc = procedure() of object;
+
+   TiposEditores = class
+   private
+      class procedure setSigno(Sender : TObject; R : TRect; Item : TinspectorItem);
+   public
+      class var enteroPositivo : TAEInspectorEditLink;
+      class var entero : TAEInspectorEditLink;
+      class constructor ClassCreate;
+      class destructor ClassDestroy;
+   end;
 
    TPropiedad = class(TPersistent)
    private
@@ -24,6 +34,7 @@ type
       fVisible : boolean;
       fPropertyType : TPropertyType;
       fValueisEmpty : boolean;
+
       fhint : string;
 
       function GetValidaisNull() : boolean;
@@ -306,6 +317,50 @@ for P in self do
    if P.Posicion = APos then
       Exit(P);
 Result := nil;
+end;
+
+{ TTiposEditores }
+
+class procedure TiposEditores.setSigno(Sender : TObject; R : TRect; Item : TinspectorItem);
+var
+   edit : TAdvEdit;
+begin
+edit := TAdvEdit(entero.GetEditor);
+edit.Signed := True;
+end;
+
+class constructor TiposEditores.ClassCreate;
+begin
+enteroPositivo := TAEInspectorEditLink.Create(nil);
+with enteroPositivo do
+   begin
+   name := 'enteroPositivo';
+   EditAlign := eaLeft;
+   EditColor := clWhite; // declarado en Vcl.graphics
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 0;
+   end;
+
+Ya quedo lo del signo falta actualizar el objeto una vez que se hace un cambio cuando se usa un TAEInspector
+
+
+entero := TAEInspectorEditLink.Create(nil);
+with entero do
+   begin
+   name := 'enteroPositivo';
+   EditAlign := eaLeft;
+   EditColor := clWhite; // declarado en Vcl.graphics
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 0;
+   entero.OnSetProperties := setSigno;
+   end;
+end;
+
+class destructor TiposEditores.ClassDestroy;
+begin
+enteroPositivo.Free;
 end;
 
 end.

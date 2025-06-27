@@ -27,6 +27,7 @@ type
    TPerro = class(TAnimal)
    private
       FRaza : string;
+      fAgresividad: integer;
       class var FDiccionarioPropiedades : TDiccionarioPropiedades;
       function GetPropiedades : TDiccionarioPropiedades; override;
       function GetAyudaProc : TAyudaProc; override;
@@ -37,6 +38,7 @@ type
       class destructor ClassDestroy;
    published
       property Raza : string read FRaza write FRaza;
+      property agresividad : integer read fAgresividad write fAgresividad;
    end;
 
    TGato = class(TAnimal)
@@ -106,7 +108,9 @@ FDiccionarioPropiedades := TDiccionarioPropiedades.Create;
 // Aquí se agregan las propiedades específicas para Perro
 propiedad := FDiccionarioPropiedades.SetPropiedad('Nombre', 0, 'nombre del perro', 0, nil);
 propiedad.hint := propiedad.propertyName + '(Perro)';
+propiedad.CanModify := false;
 FDiccionarioPropiedades.SetPropiedad('Raza', 0, 'raza del perro', 1, nil);
+FDiccionarioPropiedades.SetPropiedad('Agresividad', 0, '-10 cariñozo a 10 peligros', 1, TiposEditores.entero);
 end;
 
 procedure TPerro.ayuda;
@@ -146,7 +150,7 @@ FDiccionarioPropiedades := TDiccionarioPropiedades.Create;
 // Aquí se agregan las propiedades específicas para Gato
 FDiccionarioPropiedades.SetPropiedad('Nombre', 0, 'Nombre', 0);
 FDiccionarioPropiedades.SetPropiedad('Color', 0, 'Color', 2);
-FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 1, nil);
+FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 1, TiposEditores.enteroPositivo);
 FDiccionarioPropiedades.SetPropiedad('Humor', 1, 'Humor', 0);
 end;
 
