@@ -10,7 +10,7 @@ type
       FNombre : string;
       FEdad : Integer;
       function GetPropiedades : TDiccionarioPropiedades; virtual; abstract;
-      function GetAyudaProc : TAyudaProc; virtual;
+      function GetAyudaProc : TProcedimientoDeAyuda; virtual;
 
       { Implementación manual de IInterface }
       function QueryInterface(const IID : TGUID; out Obj) : HResult; stdcall;
@@ -30,7 +30,7 @@ type
       fAgresividad: integer;
       class var FDiccionarioPropiedades : TDiccionarioPropiedades;
       function GetPropiedades : TDiccionarioPropiedades; override;
-      function GetAyudaProc : TAyudaProc; override;
+      function GetAyudaProc : TProcedimientoDeAyuda; override;
       procedure ayuda();
    public
       constructor Create;
@@ -67,7 +67,7 @@ begin
 inherited Create;
 end;
 
-function TAnimal.GetAyudaProc : TAyudaProc;
+function TAnimal.GetAyudaProc : TProcedimientoDeAyuda;
 begin
 result := nil;
 end;
@@ -124,7 +124,7 @@ begin
 FDiccionarioPropiedades.Free;
 end;
 
-function TPerro.GetAyudaProc : TAyudaProc;
+function TPerro.GetAyudaProc : TProcedimientoDeAyuda;
 begin
 result := ayuda;
 end;

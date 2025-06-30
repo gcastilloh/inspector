@@ -84,6 +84,8 @@ object FrInspector: TFrInspector
         TabStop = True
         TabOrder = 0
         TopPanel = 0
+        OnEditStart = InspectorEditStart
+        OnEditStop = InspectorEditStop
         Version = '1.8.8.0'
         Style = esOffice2010Silver
         DefaultGradientDirection = gdVertical

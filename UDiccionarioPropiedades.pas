@@ -11,8 +11,8 @@ uses Classes, Types, Generics.Collections, System.SysUtils, Vcl.graphics, InspLi
 
 type
 
-   TValidaFuncion = function(PropertyName : string; Value : string) : boolean of object;
-   TAyudaProc = procedure() of object;
+   TFuncionDeValidacion = function(PropertyName : string; Value : string) : boolean of object;
+   TProcedimientoDeAyuda = procedure() of object;
 
    TiposEditores = class
    private
@@ -41,7 +41,7 @@ type
 
       (* ------------------------------------------------------------------- *)
    public
-      FuncionValidacion : TValidaFuncion;
+      FuncionValidacion : TFuncionDeValidacion;
       CanModify : boolean;
       // esta propiedad sirve para indicarle al sistema que el valor inicial de la propiedad debe ser utilizada en el editor
       // ver el caso de MomentoI que requiere un valor inicial
@@ -54,12 +54,12 @@ type
       property ID_PANEL : Integer read fID_PANEL write fID_PANEL;
       property Caption : string read fCaption write fCaption;
       property Posicion : Integer read fPosicion write fPosicion;
-      property EditLink : TInspectorEditLink read fEditLink write fEditLink;
+      property EditLinkAUsar : TInspectorEditLink read fEditLink write fEditLink;
       property Visible : boolean read fVisible write fVisible;
       property PropertyType : TPropertyType read fPropertyType write fPropertyType;
       property FuncionValidaconisNull : boolean read GetValidaisNull;
 
-      constructor CreateP(PropertyName : string; ID_PANEL : Integer; Caption : string; Posicion : Integer; Visible : boolean; EditLink : TAEInspectorEditLink;FuncionValidacion : TValidaFuncion);
+      constructor CreateP(PropertyName : string; ID_PANEL : Integer; Caption : string; Posicion : Integer; Visible : boolean; EditLink : TAEInspectorEditLink;FuncionValidacion : TFuncionDeValidacion);
       procedure Assign(Source : TPersistent); override;
    end;
 
@@ -91,11 +91,11 @@ type
       // Iterador de pares (clave-valor)
       function GetParesEnumerator : TDictionary<string, TPropiedad>.TPairEnumerator;
       // diferentes maneras de agregar una propiedad y su nombre
-      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad; overload;
+      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; EditLink : TAEInspectorEditLink; fv : TFuncionDeValidacion) : TPropiedad; overload;
       function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; EditLink : TAEInspectorEditLink) : TPropiedad; overload;
-      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad; overload;
+      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink; fv : TFuncionDeValidacion) : TPropiedad; overload;
       function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink) : TPropiedad; overload;
-      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; fv : TValidaFuncion) : TPropiedad; overload;
+      function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; fv : TFuncionDeValidacion) : TPropiedad; overload;
       function SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer) : TPropiedad; overload;
 
       function GetPropiedadesPorPanel(const APanelID : Integer) : TListaPropiedades;
@@ -109,9 +109,9 @@ type
       ['{D4B20A1E-1234-4F76-9FDE-FA1234567890}']
       // GUID único
       function GetPropiedades : TDiccionarioPropiedades;
-      function GetAyudaProc : TAyudaProc;
+      function GetAyudaProc : TProcedimientoDeAyuda;
       property Propiedades : TDiccionarioPropiedades read GetPropiedades;
-      property ayuda : TAyudaProc read GetAyudaProc;
+      property ayuda : TProcedimientoDeAyuda read GetAyudaProc;
    end;
 
 implementation
@@ -124,7 +124,7 @@ uses System.Generics.Defaults;
 /// ----------------------------------------------------------------------------------------
 /// ----------------------------------------------------------------------------------------
 
-constructor TPropiedad.CreateP(PropertyName : string; ID_PANEL : Integer; Caption : string; Posicion : Integer; Visible : boolean; EditLink : TAEInspectorEditLink;FuncionValidacion : TValidaFuncion);
+constructor TPropiedad.CreateP(PropertyName : string; ID_PANEL : Integer; Caption : string; Posicion : Integer; Visible : boolean; EditLink : TAEInspectorEditLink;FuncionValidacion : TFuncionDeValidacion);
 begin
 self.PropertyName := PropertyName;
 self.hint := '';
@@ -132,7 +132,7 @@ self.Visible := Visible;
 self.ID_PANEL := ID_PANEL;
 self.Caption := Caption;
 self.Posicion := Posicion;
-self.EditLink := EditLink;
+self.EditLinkAUsar := EditLink;
 self.FuncionValidacion := FuncionValidacion;
 
 // Asignación de valores por omisión
@@ -148,7 +148,7 @@ if Source is TPropiedad then
    ID_PANEL := TPropiedad(Source).ID_PANEL;
    Caption := TPropiedad(Source).Caption;
    Posicion := TPropiedad(Source).Posicion;
-   EditLink := TPropiedad(Source).EditLink;
+   EditLinkAUsar := TPropiedad(Source).EditLinkAUsar;
    Visible := TPropiedad(Source).Visible;
    PropertyType := TPropiedad(Source).PropertyType;
    ValueisEmpty := TPropiedad(Source).ValueisEmpty;
@@ -249,7 +249,7 @@ Result.Sort(TComparer<TPropiedad>.Construct(function(const Left, Right : TPropie
 end;
 
 // Con propiedad Visible y con Funcion de Validacion
-function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad;
+function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; Visible : boolean; EditLink : TAEInspectorEditLink; fv : TFuncionDeValidacion) : TPropiedad;
 var
    Propiedad : TPropiedad;
 begin
@@ -267,14 +267,14 @@ end;
 
 (* ========================================================================== *)
 // Visible=TRUE y con Funcion de Validacion
-function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; EditLink : TAEInspectorEditLink; fv : TValidaFuncion) : TPropiedad;
+function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; EditLink : TAEInspectorEditLink; fv : TFuncionDeValidacion) : TPropiedad;
 begin
 Result := SetPropiedad(PropertyName, ID_PANEL, PropertyCaption, POS, True, EditLink, fv);
 end;
 
 (* ========================================================================== *)
 // Visible=TRUE y sin EditLink y con Funcion de Validacion
-function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; fv : TValidaFuncion) : TPropiedad;
+function TDiccionarioPropiedades.SetPropiedad(PropertyName : string; ID_PANEL : Integer; PropertyCaption : string; POS : Integer; fv : TFuncionDeValidacion) : TPropiedad;
 begin
 Result := SetPropiedad(PropertyName, ID_PANEL, PropertyCaption, POS, True, nil, fv);
 end;
@@ -330,6 +330,7 @@ edit.Signed := True;
 end;
 
 class constructor TiposEditores.ClassCreate;
+var edit : TAdvEdit;
 begin
 enteroPositivo := TAEInspectorEditLink.Create(nil);
 with enteroPositivo do
@@ -342,7 +343,7 @@ with enteroPositivo do
    Precision := 0;
    end;
 
-Ya quedo lo del signo falta actualizar el objeto una vez que se hace un cambio cuando se usa un TAEInspector
+//Ya quedo lo del signo falta actualizar el objeto una vez que se hace un cambio cuando se usa un TAEInspector
 
 
 entero := TAEInspectorEditLink.Create(nil);
@@ -354,6 +355,8 @@ with entero do
    EditStyle := esInplace;
    EditType := etFloat;
    Precision := 0;
+   // se usa un evento porque en la construccion de la clase aun no se dispone de getEditor
+   // se usa este evento para forzar a que los enteros tengan signo.
    entero.OnSetProperties := setSigno;
    end;
 end;

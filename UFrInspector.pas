@@ -15,6 +15,8 @@ type
       BtnAyuda : TButton;
       procedure cmbObjetosSelect(Sender : TObject);
       procedure BtnAyudaClick(Sender : TObject);
+      procedure InspectorEditStart(Sender : TObject; AInspectorPanel : TInspectorPanel; AInspectorItem : TInspectorItem);
+      procedure InspectorEditStop(Sender : TObject; AInspectorPanel : TInspectorPanel; AInspectorItem : TInspectorItem);
 
    private
       { Private declarations }
@@ -27,7 +29,7 @@ type
       // IPanelOtros : TRTTIInspectorPanel;
       // IPanelOtros2 : TRTTIInspectorPanel;
 
-      ayudaProc : TAyudaProc;
+      ayudaProc : TProcedimientoDeAyuda;
 
       procedure SetValoresDefault();
       { esto es solo para el patron observador }
@@ -62,7 +64,7 @@ constructor TFrInspector.Create(AOwner : TComponent);
 begin
 inherited;
 FObserverList := TList<IObservadorModificacionPropuesta>.Create;
-setValoresDefault();
+SetValoresDefault();
 
 cmbObjetos.Text := '';
 cmbObjetos.Visible := true;
@@ -222,12 +224,13 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
             IPanel.Items[k].Visible := propiedad <> nil;
             if propiedad <> nil then
                begin
+               IPanel.Items[k].ItemObject := propiedad; // la TPropiedad queda registrada en itemObject para futuras referencias
                IPanel.Items[k].Caption := propiedad.Caption; // ojo aqui se cambió el caption de la propiedad
-               if propiedad.EditLink <> nil then
+               if propiedad.EditLinkAUsar <> nil then
                   begin
                   cadenaAux := IPanel.Items[k].TextValue;
                   IPanel.Items[k].PropertyType := ptCustom;
-                  IPanel.Items[k].EditLink := propiedad.EditLink;
+                  IPanel.Items[k].EditLink := propiedad.EditLinkAUsar;
                   IPanel.Items[k].TextValue := cadenaAux;
                   end;
                IPanel.Items[k].ReadOnly := not propiedad.CanModify;
@@ -244,12 +247,18 @@ for idPanel := 0 to Inspector.Panels.Count - 1 do
 
 end;
 
+(* ========================================================================== *)
+{ Evento que es lanzado cuando se TERMINA a editar un elemento del Inspector }
+
 procedure TFrInspector.BtnAyudaClick(Sender : TObject);
 begin
 if assigned(ayudaProc) then
    ayudaProc();
 end;
 
+/// seleccionaObjeto : agrega el objeto al combo box de objetos, lo selecciona en el combo box
+/// y prepara los paneles para que muestren su información (llama a preparaPaneles, este es el único lugar
+/// donde se llama a prepararPaneles.
 procedure TFrInspector.seleccionaObjeto(objeto : TPersistent);
 begin
 if objeto <> nil then
@@ -264,7 +273,7 @@ end;
 (* ========================================================================== *)
 { Metodo publico para registrar objeto }
 { solamente registra Dispositivos }
-{ esete metodo solo registra el objeto en el Combo pero NO LO SELECCIONA PORO LO QUE DEBERA DESPUES selectObjeto }
+{ esete metodo solo registra el objeto en el Combo pero NO LO SELECCIONA PORO LO QUE DEBERA DESPUES llamar a selectObjeto }
 procedure TFrInspector.registraObjeto(nombre : string; objeto : TPersistent);
 begin
 /// Control del Combo box////////////////////////////////////////////////////
@@ -289,6 +298,82 @@ cmbObjetos.Items.Delete(k);
 if not(cmbObjetos.Items.Count > 0) then
    begin
    clear;
+   end;
+end;
+
+procedure TFrInspector.InspectorEditStart(Sender : TObject; AInspectorPanel : TInspectorPanel; AInspectorItem : TInspectorItem);
+begin
+//
+end;
+
+procedure TFrInspector.InspectorEditStop(Sender : TObject; AInspectorPanel : TInspectorPanel; AInspectorItem : TInspectorItem);
+var
+   cadena : string;
+   propiedad : TPropiedad;
+   valida : TFuncionDeValidacion;
+   isCorrect : boolean;
+   v : TPersistent;
+   Index : integer;
+begin
+
+propiedad := TPropiedad(AInspectorItem.ItemObject);
+
+// enteroPositivo.EditStyle := esInplace;
+// enteroPositivo.EditType := etFloat;
+// entero.
+// entero.EditStyle := esInplace;
+// entero.EditType := etFloat;
+
+// Caso 1:Si ha sido asignado un Edit link a la propiedad /////////////////
+if (propiedad <> nil) and (propiedad.EditLinkAUsar <> nil) then
+   begin
+   cadena := AInspectorItem.TextValue;
+   if cadena <> '' then
+      begin
+
+      // Validacion de la propiedad que se acaba de editar
+
+      if not propiedad.FuncionValidaconisNull then
+         begin
+         valida := propiedad.FuncionValidacion;
+         isCorrect := valida(propiedad.PropertyName, cadena);
+         // gch 2019 marzo 10 aqui es donde se hace el juego de cambio de color a rojo
+         // no me gusta... pero funciona, cuando Modified se hace true el control
+         // recibe la notificacion y cambia a rojo porque la propiedad de color cuando se modifica esta
+         // colocada a rojo en el AIEL... del dat module
+         if not isCorrect then
+            begin
+            AInspectorItem.Modified := true; // cambia a rojo
+            end
+         else
+            begin
+            NotifyObservers;
+            AInspectorItem.Modified := False; // <--- se mantiene en negro
+            end;
+         end
+      else
+         begin
+         NotifyObservers;
+         end;
+      // Se experimento cierto comportamiento no  esperado cuando se intentan
+      // guardar enteros
+      AInspectorItem.PropertyType := propiedad.PropertyType;
+      if (propiedad.PropertyType = TPropertyType.ptIntSpin) or (propiedad.PropertyType = TPropertyType.ptInteger) then
+         begin // Enteros
+         AInspectorItem.IntValue := StrToInt(cadena);
+         end
+      else
+         begin
+         AInspectorItem.TextValue := cadena;
+         propiedad.ValueisEmpty := False;
+         end;
+      end
+   else
+      begin
+      { Si planea usar la cadena vacia }
+      propiedad.ValueisEmpty := true;
+      AInspectorItem.TextValue := '';
+      end;
    end;
 end;
 
