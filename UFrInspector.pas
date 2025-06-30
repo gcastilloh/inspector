@@ -320,7 +320,6 @@ propiedad := TPropiedad(AInspectorItem.ItemObject);
 
 // enteroPositivo.EditStyle := esInplace;
 // enteroPositivo.EditType := etFloat;
-// entero.
 // entero.EditStyle := esInplace;
 // entero.EditType := etFloat;
 
@@ -379,23 +378,12 @@ end;
 
 (* ========================================================================== *)
 
-{ modelo del patron observador }
-
 {
   function TFrInspector.GetModified: boolean;
   begin
   Result := fModified;
   end;
 }
-procedure TFrInspector.NotifyObservers;
-var
-   observador : IObservadorModificacionPropuesta;
-begin
-for observador in FObserverList do
-   begin
-   observador.UpdateObservador(true); // notifica a los observadores el cambio de estado (se ha modificado)
-   end;
-end;
 
 procedure TFrInspector.RefrescaNoEditables(AInspectorPanel : TInspectorPanel);
 // var
@@ -410,6 +398,23 @@ begin
 //
 // end;
 // end;
+
+end;
+
+{ ========================================================================= }
+{ ========================================================================= }
+{ modelo del patron observador }
+{ ========================================================================= }
+{ ========================================================================= }
+
+procedure TFrInspector.NotifyObservers;
+var
+   observador : IObservadorModificacionPropuesta;
+begin
+for observador in FObserverList do
+   begin
+   observador.UpdateObservador(true); // notifica a los observadores el cambio de estado (se ha modificado)
+   end;
 end;
 
 procedure TFrInspector.RegisterObserver(observador : IObservadorModificacionPropuesta);
