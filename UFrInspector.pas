@@ -302,8 +302,18 @@ if not(cmbObjetos.Items.Count > 0) then
 end;
 
 procedure TFrInspector.InspectorEditStart(Sender : TObject; AInspectorPanel : TInspectorPanel; AInspectorItem : TInspectorItem);
+var
+   cadena : string;
+   propiedad : TPropiedad;
 begin
-//
+// establece el tipo de editor de acuerdo con lo que se indicó en propiedad
+propiedad := TPropiedad(AInspectorItem.ItemObject);
+cadena := AInspectorItem.TextValue;
+if (propiedad.EditLinkAUsar <> nil) then
+   begin
+   AInspectorItem.PropertyType := propiedad.PropertyType;
+   AInspectorItem.TextValue := cadena;
+   end;
 end;
 
 procedure TFrInspector.InspectorEditStop(Sender : TObject; AInspectorPanel : TInspectorPanel; AInspectorItem : TInspectorItem);
@@ -354,18 +364,9 @@ if (propiedad <> nil) and (propiedad.EditLinkAUsar <> nil) then
          begin
          NotifyObservers;
          end;
-      // Se experimento cierto comportamiento no  esperado cuando se intentan
-      // guardar enteros
-      AInspectorItem.PropertyType := propiedad.PropertyType;
-      if (propiedad.PropertyType = TPropertyType.ptIntSpin) or (propiedad.PropertyType = TPropertyType.ptInteger) then
-         begin // Enteros
-         AInspectorItem.IntValue := StrToInt(cadena);
-         end
-      else
-         begin
-         AInspectorItem.TextValue := cadena;
-         propiedad.ValueisEmpty := False;
-         end;
+
+      AInspectorItem.TextValue := cadena;
+      propiedad.ValueisEmpty := False;
       end
    else
       begin
@@ -375,9 +376,6 @@ if (propiedad <> nil) and (propiedad.EditLinkAUsar <> nil) then
       end;
    end;
 end;
-
-
-
 
 (* ========================================================================== *)
 
