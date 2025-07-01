@@ -376,6 +376,9 @@ if (propiedad <> nil) and (propiedad.EditLinkAUsar <> nil) then
    end;
 end;
 
+
+
+
 (* ========================================================================== *)
 
 {

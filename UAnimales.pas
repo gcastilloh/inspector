@@ -27,7 +27,7 @@ type
    TPerro = class(TAnimal)
    private
       FRaza : string;
-      fAgresividad: integer;
+      fAgresividad : Integer;
       class var FDiccionarioPropiedades : TDiccionarioPropiedades;
       function GetPropiedades : TDiccionarioPropiedades; override;
       function GetAyudaProc : TProcedimientoDeAyuda; override;
@@ -38,21 +38,24 @@ type
       class destructor ClassDestroy;
    published
       property Raza : string read FRaza write FRaza;
-      property agresividad : integer read fAgresividad write fAgresividad;
+      property agresividad : Integer read fAgresividad write fAgresividad;
    end;
 
    TGato = class(TAnimal)
+   class var
+      FDiccionarioPropiedades : TDiccionarioPropiedades;
+      function GetPropiedades : TDiccionarioPropiedades; override;
    private
       FColor : string;
       fHumor : string;
-      class var FDiccionarioPropiedades : TDiccionarioPropiedades;
-      function GetPropiedades : TDiccionarioPropiedades; override;
+      fPeso : double;
    public
       constructor Create;
       class constructor ClassCreate;
       class destructor ClassDestroy;
    published
       property Color : string read FColor write FColor;
+      property peso : double read fPeso write fPeso;
       property humor : string read fHumor write fHumor;
    end;
 
@@ -151,7 +154,8 @@ FDiccionarioPropiedades := TDiccionarioPropiedades.Create;
 FDiccionarioPropiedades.SetPropiedad('Nombre', 0, 'Nombre', 0);
 FDiccionarioPropiedades.SetPropiedad('Color', 0, 'Color', 2);
 FDiccionarioPropiedades.SetPropiedad('Edad', 0, 'Edad', 1, TiposEditores.enteroPositivo);
-FDiccionarioPropiedades.SetPropiedad('Humor', 1, 'Humor', 0);
+FDiccionarioPropiedades.SetPropiedad('Peso', 1, 'Peso', 0, TiposEditores.real2d);
+FDiccionarioPropiedades.SetPropiedad('Humor', 1, 'Humor', 1);
 end;
 
 class destructor TGato.ClassDestroy;

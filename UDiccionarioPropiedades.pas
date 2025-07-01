@@ -20,6 +20,12 @@ type
    public
       class var enteroPositivo : TAEInspectorEditLink;
       class var entero : TAEInspectorEditLink;
+      class var real1d : TAEInspectorEditLink;
+      class var real2d : TAEInspectorEditLink;
+      class var real3d : TAEInspectorEditLink;
+      class var real4d : TAEInspectorEditLink;
+      class var real5d : TAEInspectorEditLink;
+      class var real6d : TAEInspectorEditLink;
       class constructor ClassCreate;
       class destructor ClassDestroy;
    end;
@@ -256,6 +262,26 @@ begin
 Propiedad := TPropiedad.CreateP(PropertyName, ID_PANEL, PropertyCaption, POS, Visible, EditLink, fv);
 agregarPropiedad(PropertyName, Propiedad);
 Result := Propiedad;
+//
+//  TPropertyType = (ptInteger, ptFloat, ptText, ptColor, ptFont, ptBoolean, ptValues,
+//    ptIntSpin, ptTextButton, ptPropButton, ptDate, ptTime, ptCustom, ptValuesList, ptFixedColor, ptButton, ptPassword, ptPicture);
+//
+//  TAdvEditType = (etString, etNumeric, etFloat, etUppercase, etMixedCase, etLowerCase,
+//    etPassword, etMoney, etRange, etHex, etAlphaNumeric, etValidChars, etInvalidChars);
+  if EditLink = TiposEditores.enteroPositivo then
+     result.PropertyType := ptInteger
+  else if EditLink = TiposEditores.entero then
+     result.PropertyType := ptInteger
+  else if (EditLink = TiposEditores.real1d)
+     or   (EditLink = TiposEditores.real2d)
+     or   (EditLink = TiposEditores.real3d)
+     or   (EditLink = TiposEditores.real4d)
+     or   (EditLink = TiposEditores.real5d)
+     or   (EditLink = TiposEditores.real6d) then
+   result.PropertyType := ptFloat
+else
+   result.PropertyType := ptText;
+
 end;
 
 (* ========================================================================== *)
@@ -325,12 +351,16 @@ class procedure TiposEditores.setSigno(Sender : TObject; R : TRect; Item : Tinsp
 var
    edit : TAdvEdit;
 begin
-edit := TAdvEdit(entero.GetEditor);
+edit := TAdvEdit((Sender as TAEInspectorEditLink).GetEditor);
 edit.Signed := True;
 end;
 
+
+//   TAdvEditType = (etString, etNumeric, etFloat, etUppercase, etMixedCase, etLowerCase,
+//    etPassword, etMoney, etRange, etHex, etAlphaNumeric, etValidChars, etInvalidChars);
 class constructor TiposEditores.ClassCreate;
-var edit : TAdvEdit;
+var
+   edit : TAdvEdit;
 begin
 enteroPositivo := TAEInspectorEditLink.Create(nil);
 with enteroPositivo do
@@ -339,31 +369,110 @@ with enteroPositivo do
    EditAlign := eaLeft;
    EditColor := clWhite; // declarado en Vcl.graphics
    EditStyle := esInplace;
-   EditType := etFloat;
+   EditType := etNumeric;
    Precision := 0;
    end;
-
-//Ya quedo lo del signo falta actualizar el objeto una vez que se hace un cambio cuando se usa un TAEInspector
-
 
 entero := TAEInspectorEditLink.Create(nil);
 with entero do
    begin
-   name := 'enteroPositivo';
+   name := 'entero';
    EditAlign := eaLeft;
    EditColor := clWhite; // declarado en Vcl.graphics
    EditStyle := esInplace;
-   EditType := etFloat;
+   EditType := etNumeric;
    Precision := 0;
    // se usa un evento porque en la construccion de la clase aun no se dispone de getEditor
    // se usa este evento para forzar a que los enteros tengan signo.
    entero.OnSetProperties := setSigno;
    end;
+
+real1d := TAEInspectorEditLink.Create(nil);
+with real1d do
+   begin
+   name := 'real1d';
+   EditAlign := eaLeft;
+   EditColor := clWhite;
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 1;
+   real1d.OnSetProperties := setSigno;
+   end;
+
+real2d := TAEInspectorEditLink.Create(nil);
+with real2d do
+   begin
+   name := 'real2d';
+   EditAlign := eaLeft;
+   EditColor := clWhite;
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 2;
+   real2d.OnSetProperties := setSigno;
+   end;
+
+real3d := TAEInspectorEditLink.Create(nil);
+with real3d do
+   begin
+   name := 'real3d';
+
+   EditAlign := eaLeft;
+   EditColor := clWhite;
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 3;
+   real3d.OnSetProperties := setSigno;
+   end;
+
+real4d := TAEInspectorEditLink.Create(nil);
+with real4d do
+   begin
+   name := 'real4d';
+   EditAlign := eaLeft;
+   EditColor := clWhite;
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 4;
+   real4d.OnSetProperties := setSigno;
+   end;
+
+real5d := TAEInspectorEditLink.Create(nil);
+with real5d do
+   begin
+   name := 'real5d';
+   EditAlign := eaLeft;
+   EditColor := clWhite;
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 5;
+   real5d.OnSetProperties := setSigno;
+   end;
+
+real6d := TAEInspectorEditLink.Create(nil);
+with real6d do
+   begin
+   name := 'real6d';
+   EditAlign := eaLeft;
+   EditColor := clWhite;
+   EditStyle := esInplace;
+   EditType := etFloat;
+   Precision := 6;
+   real6d.OnSetProperties := setSigno;
+   end;
+
 end;
 
 class destructor TiposEditores.ClassDestroy;
 begin
 enteroPositivo.Free;
+entero.Free;
+real1d.Free;
+real2d.Free;
+real3d.Free;
+real4d.Free;
+real5d.Free;
+real6d.Free;
+
 end;
 
 end.
